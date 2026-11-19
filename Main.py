@@ -46,14 +46,14 @@ async def on_ready():
 @bot.event
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.text_channels, name="📩-new-folks")
-                if channel:
-                     await channel.send(f"Hi {member.mention}! Welcome sa E2 - generous Discord! 💖🐾 Welcome sa Llama Storytelling Gallery! Anong hanap mo beh? Paano kita matutulungan? Type **!shop** para makita yung shop!")
+    if channel:
+        await channel.send(f"Hi {member.mention}! Welcome sa E2 - generous Discord! 💖🐾 Welcome sa Llama Storytelling Gallery! Anong hanap mo beh? Paano kita matutulungan? Type **!shop** para makita yung shop!")
 
 @bot.event
 async def on_message(message):
-                if message.author == bot.user:
+    if message.author == bot.user:
         return
-        msg = message.content.lower()
+    msg = message.content.lower()
 
     english_words = ["hello", "hi", "hey", "how much", "price", "how to", "order", "shop", "what", "how are you", "help"]
     tagalog_words = ["kamusta", "magkano", "paano", "bili", "presyo"]
