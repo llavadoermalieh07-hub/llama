@@ -76,9 +76,9 @@ async def on_message(message):
          else:
                 await message.channel.send(f"15 PHP lang beh! 3 Pages + Cover na! ❤️ Anong story gusto mo? Paano pa kita matutulungan?")
         elif "order" in msg or "paano" in msg or "bili" in msg or "how to" in msg:
-        if is_english:
-             await message.channel.send(f"It's easy to order beh! 1. Pick here: https://kawaii-shop-update.netlify.app 2. Tell me your story!")
-         else:
+           if is_english:
+                await message.channel.send(f"It's easy to order beh! 1. Pick here: https://kawaii-shop-update.netlify.app 2. Tell me your story!")
+        else:
                 await message.channel.send(f"Madali lang mag-order beh! 1. Pili ka dito: https://kawaii-shop-update.netlify.app 2. Sabihin mo sakin story mo!")
         elif "shop" in msg or "story" in msg:
         if is_english:
