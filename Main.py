@@ -65,7 +65,7 @@ async def on_message(message):
     else:
                       await message.channel.send(f"Yes beh? Andito ako! ❤️ Paano kita matutulungan? Anong story gusto mo?")
                       return
-                if "hi" in msg or "hello" in msg or "hey" in msg or "kamusta" in msg:
+   if "hi" in msg or "hello" in msg or "hey" in msg or "kamusta" in msg:
                 if is_english:
                       await message.channel.send(f"Hi {message.author.mention}! Welcome beh! ❤️ What are you looking for? How can I help you?"
     else:
