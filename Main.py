@@ -97,7 +97,7 @@ from flask import Flask
 import threading
 import os
 
-app = Flask(__name__)
+app = Flask("Main")
 
 @app.route('/')
 def home():
