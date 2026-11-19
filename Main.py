@@ -71,7 +71,7 @@ async def on_message(message):
 if msg.startswith("!shop") or msg.startswith("!store"):
         await message.channel.send("Eto yung shop ko beh! 👇\nhttps://kawaii-shop-update.netlify.app/\nAnong hanap mo? Pang-cute ba? Pang-adventure? Sabihin mo lang!")
 
-    elif msg.startswith("!price") or "price" in msg:
+    if msg.startswith("!price") or "price" in msg:
         await message.channel.send("Beh! 15 PHP lang per set! ❤️\nMay cover + 3 inside pages na!\nPili ka beh: Desert, Strawberries, Starry Hill, at E2 Garden!")
 
     elif msg.startswith("!order") or "order" in msg:
