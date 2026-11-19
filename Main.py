@@ -92,3 +92,19 @@ async def on_message(message):
             await message.channel.send(f"It's easy to order beh! 1. Pick here: https://kawaii-shop-update.netlify.app 2. Tell me your story!")
         else:
             await message.channel.send(f"Madali lang mag-order beh! 1. Pili ka dito: https://kawaii-shop-update.netlify.app 2. Sabihin mo sakin story mo!")
+# --- DULO NI LLAMA, PAMPABUHAY ---
+from flask import Flask
+import threading
+import os
+
+app = Flask(_name_)
+
+@app.route('/')
+def home():
+    return "Llama is alive!"
+
+def run_flask():
+    app.run(host="0.0.0.0", port=10000)
+
+threading.Thread(target=run_flask, daemon=True).start()
+bot.run(os.getenv("TOKEN"))
