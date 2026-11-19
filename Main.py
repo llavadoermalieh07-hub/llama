@@ -68,27 +68,27 @@ async def on_message(message):
         if "hi" in msg or "hello" in msg or "hey" in msg or "kamusta" in msg:
             if is_english:
               await message.channel.send(f"Hi {message.author.mention}! Welcome beh! ❤️ What are you looking for? How can I help you?")
-            else:
+          else:
                 await message.channel.send(f"Hi {message.author.mention}! Welcome beh! ❤️ Anong hanap mo? Paano kita matutulungan?")
-        elif "magkano" in msg or "price" in msg or "how much" in msg or "presyo" in msg:
-         if is_english:
+           elif "magkano" in msg or "price" in msg or "how much" in msg or "presyo" in msg:
+        if is_english:
             await message.channel.send(f"Only 15 PHP beh! 3 Pages + Cover already! ❤️ What story do you want?")
          else:
-                await message.channel.send(f"15 PHP lang beh! 3 Pages + Cover na! ❤️ Anong story gusto mo? Paano pa kita matutulungan?")
+                     await message.channel.send(f"15 PHP lang beh! 3 Pages + Cover na! ❤️ Anong story gusto mo? Paano pa kita matutulungan?")
             elif "order" in msg or "paano" in msg or "bili" in msg or "how to" in msg:
                    if is_english:
                           await message.channel.send(f"It's easy to order beh! 1. Pick here: https://kawaii-shop-update.netlify.app 2. Tell me your story!")
          else:
-                         await message.channel.send(f"Madali lang mag-order beh! 1. Pili ka dito: https://kawaii-shop-update.netlify.app 2. Sabihin mo sakin story mo!")
+                      await message.channel.send(f"Madali lang mag-order beh! 1. Pili ka dito: https://kawaii-shop-update.netlify.app 2. Sabihin mo sakin story mo!")
            elif "shop" in msg or "story" in msg:
                   if is_english:
                       await message.channel.send(f"Here is my shop beh! ❤️ https://kawaii-shop-update.netlify.app What are you looking for?")
-        else:
+         else:
                       await message.channel.send(f"Eto yung shop ko beh! ❤️ https://kawaii-shop-update.netlify.app Anong hanap mo? Pang-cute ba?")
-          elif "?" in msg:
-               if is_english:
+           elif "?" in msg:
+                  if is_english:
                      await message.channel.send(f"Ay beh, I want to help you! ❤️ What are you looking for? How can I help you? Just type it!")
-        else:
+         else:
                      await message.channel.send(f"Ay beh, gusto ko tulungan ka! ❤️ Anong hanap mo? Paano kita matutulungan? Type mo lang!")
         await bot.process_commands(message)
 @bot.command()
