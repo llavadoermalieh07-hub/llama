@@ -3,6 +3,26 @@ from discord.ext import commands
 import os
 from flask import Flask
 from threading import Thread
+import os
+from supabase import create_client
+
+# UTAN NI LLAMA - Supabase
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+def save_memory(user_id, username, message, llama_reply):
+    supabase.table("llama_memories").insert({
+        "user_id": str(user_id),
+        "username": username,
+        "message": message,
+        "llama_reply": llama_reply
+    }).execute()
+
+def get_memories(user_id):
+    data = supabase.table("llama_memories").select("*").eq("user_id", str(user_id)).order("created_at", desc=True).limit(5).execute()
+    return data.data
+Compose
 
 app = Flask('')
 @app.route('/')
