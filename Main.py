@@ -52,7 +52,7 @@ async def on_member_join(member):
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
-        return
+            return
     msg = message.content.lower()
 
     english_words = ["hello", "hi", "hey", "how much", "price", "how to", "order", "shop", "what", "how are you", "help"]
