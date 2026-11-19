@@ -46,7 +46,7 @@ async def on_ready():
 @bot.event
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.text_channels, name="📩-new-folks")
-                 if channel:
+                if channel:
                      await channel.send(f"Hi {member.mention}! Welcome sa E2 - generous Discord! 💖🐾 Welcome sa Llama Storytelling Gallery! Anong hanap mo beh? Paano kita matutulungan? Type **!shop** para makita yung shop!")
 
 @bot.event
