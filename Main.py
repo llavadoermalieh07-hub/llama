@@ -68,13 +68,13 @@ async def on_message(message):
     english_words = ["hello", "hi", "hey", "how much", "price", "how to", "order", "shop", "what", "how are you", "help"]
     tagalog_words = ["kamusta", "magkano", "paano", "bili", "presyo"]
     is_english = any(w in msg for w in english_words) and not any(w in msg for w in tagalog_words)
-if msg.startswith("!shop") or msg.startswith("!store"):
+    if msg.startswith("!shop") or msg.startswith("!store"):
         await message.channel.send("Eto yung shop ko beh! 👇\nhttps://kawaii-shop-update.netlify.app/\nAnong hanap mo? Pang-cute ba? Pang-adventure? Sabihin mo lang!")
         return
     if msg.startswith("!price") or "price" in msg:
         await message.channel.send("Beh! 15 PHP lang per set! ❤️\nMay cover + 3 inside pages na!\nPili ka beh: Desert, Strawberries, Starry Hill, at E2 Garden!")
         return
-    elif msg.startswith("!order") or "order" in msg:
+    if msg.startswith("!order") or "order" in msg:
         await message.channel.send("Beh! Pili ka sa shop tapos DM mo si Ermalieh beh!\nhttps://kawaii-shop-update.netlify.app/\nSabihin mo lang kung alin gusto mo!")
     if "llama" in msg:
         if is_english:
