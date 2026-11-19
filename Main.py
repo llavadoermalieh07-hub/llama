@@ -57,8 +57,8 @@ async def on_message(message):
 
     english_words = ["hello", "hi", "hey", "how much", "price", "how to", "order", "shop", "what", "how are you", "help"]
     tagalog_words = ["kamusta", "magkano", "paano", "bili", "presyo"]
-    is_english = any(w in msg for w in english_words) and not any(w in msg for w in tagalog_words)
-                if "llama" in msg:
+    is_english = any(w in msg for w in english_words) and not any(w in msg for w in tagalog_words
+    if "llama" in msg:
                 if is_english:
                       await message.channel.send(f"Yes beh? I'm here! ❤️ How can I help you? What story do you want?")
             return
