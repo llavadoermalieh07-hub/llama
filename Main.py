@@ -52,7 +52,7 @@ async def on_member_join(member):
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
-            return
+             return
     msg = message.content.lower()
 
     english_words = ["hello", "hi", "hey", "how much", "price", "how to", "order", "shop", "what", "how are you", "help"]
@@ -61,10 +61,10 @@ async def on_message(message):
     if "llama" in msg:
                 if is_english:
                       await message.channel.send(f"Yes beh? I'm here! ❤️ How can I help you? What story do you want?")
-            return
+              return
         else:
                       await message.channel.send(f"Yes beh? Andito ako! ❤️ Paano kita matutulungan? Anong story gusto mo?")
-            return
+              return
                 if "hi" in msg or "hello" in msg or "hey" in msg or "kamusta" in msg:
                 if is_english:
                       await message.channel.send(f"Hi {message.author.mention}! Welcome beh! ❤️ What are you looking for? How can I help you?"
