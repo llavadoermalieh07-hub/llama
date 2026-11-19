@@ -4,7 +4,17 @@ import os
 from flask import Flask
 from threading import Thread
 from supabase import create_client
+app = Flask(_name_)
 
+@app.route('/')
+def home():
+    return "Llama is alive!"
+
+def run_web():
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+
+Thread(target=run_web, daemon=True).start()
 # UTAN NI LLAMA - Supabase
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
