@@ -51,15 +51,15 @@ async def on_member_join(member):
 
 @bot.event
 async def on_message(message):
-    if message.author == bot.user:
+              if message.author == bot.user:
         return
         msg = message.content.lower()
 
     english_words = ["hello", "hi", "hey", "how much", "price", "how to", "order", "shop", "what", "how are you", "help"]
     tagalog_words = ["kamusta", "magkano", "paano", "bili", "presyo"]
     is_english = any(w in msg for w in english_words) and not any(w in msg for w in tagalog_words)
-    if "llama" in msg:
-               if is_english:
+                if "llama" in msg:
+                if is_english:
                       await message.channel.send(f"Yes beh? I'm here! ❤️ How can I help you? What story do you want?")
             return
         else:
