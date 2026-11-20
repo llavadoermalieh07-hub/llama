@@ -1,3 +1,4 @@
+import asyncio
 import os
 import re
 from random import choice
@@ -6,6 +7,7 @@ from threading import Thread
 import discord
 from discord.ext import commands
 from flask import Flask
+from supabase import create_client
 
 # Small health-check web server for hosting platforms.
 app = Flask(__name__)
@@ -29,6 +31,35 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 SHOP_URL = "https://kawaii-shop-update.netlify.app/"
+
+# Configure these as environment variables in your hosting dashboard.
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = (
+    os.getenv("SUPABASE_KEY")
+    or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    or os.getenv("SUPABASE_SECRET_KEY")
+)
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL and SUPABASE_KEY else None
+
+
+async def send_reply(message, reply):
+    """Send Llama's reply and store the user/reply pair in Supabase."""
+    await message.channel.send(reply)
+    if supabase is None:
+        print("Supabase memory not saved: set SUPABASE_URL and SUPABASE_KEY.")
+        return
+
+    try:
+        await asyncio.to_thread(
+            lambda: supabase.table("llama_memories").insert({
+                "message": message.content,
+                "llama_reply": reply,
+            }).execute()
+        )
+    except Exception as error:
+        # Keep the Discord bot responsive if Supabase is temporarily unavailable.
+        print(f"Failed to save conversation to Supabase: {error}")
+
 
 ENGLISH_WORDS = {
     "a", "about", "are", "can", "create", "do", " hello", "help", "how",
@@ -110,21 +141,21 @@ async def on_message(message):
             reply = f"Here's our shop, beh! 👇\n{SHOP_URL}\nWhat are you looking for? ❤️"
         else:
             reply = f"Eto yung shop namin beh! 👇\n{SHOP_URL}\nAnong hanap mo? ❤️"
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
     if msg.startswith("!price") or "price" in msg or "how much" in msg or "magkano" in msg or "presyo" in msg:
         if english:
             reply = "It's only 15 PHP per set, beh! ❤️ Each set has a cover + 3 inside pages. Choose from Desert, Strawberries, Starry Hill, and E2 Garden!"
         else:
             reply = "Beh! 15 PHP lang per set! ❤️ May cover + 3 inside pages na! Pili ka: Desert, Strawberries, Starry Hill, at E2 Garden!"
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
     if msg.startswith("!order") or "order" in msg or "bili" in msg:
         if english:
             reply = f"Choose something from the shop, then DM Ermalieh, beh! ❤️\n{SHOP_URL}"
         else:
             reply = f"Pili ka sa shop tapos DM mo si Ermalieh beh! ❤️\n{SHOP_URL}"
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
 
     # Stories are handled before general questions, so a story request gets a story.
@@ -150,9 +181,9 @@ async def on_message(message):
         topic = story_match.group(1).strip()
         if not topic:
             prompt = "What topic should the story be about, beh? ❤️" if english else "Anong topic ng story, beh? ❤️"
-            await message.channel.send(prompt)
+            await send_reply(message, prompt)
         else:
-            await message.channel.send(make_story(topic, language))
+            await send_reply(message, make_story(topic, language))
         return
 
     # Introduce Llama before the general replies and fallback.
@@ -161,48 +192,48 @@ async def on_message(message):
             reply = "Hi beh! I'm Llama! ❤️ I'm your cute little friend here in Discord. I love chatting with you, making cute stories, and helping you with your shop! What do you want to talk about today?"
         else:
             reply = "Hi beh! Ako si Llama! ❤️ Yung cute mong kaibigan dito sa Discord. Mahilig ako makipagkwentuhan, gumawa ng cute stories, at tumulong sa shop mo! Anong kwento natin today?"
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
 
     # Respond to the actual question in the language the user used.
     if "sure" in msg:
         reply = "Yes beh, I'm sure! ❤️" if english else "Oo naman beh, sure ako! ❤️"
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
     if "how are you" in msg or "kamusta ka" in msg or "kumusta ka" in msg:
         if english:
             reply = "I'm doing great, beh—ready to chat and make cute stories! How are you? ❤️"
         else:
             reply = "Okay naman ako, beh—ready makipagkuwentuhan at gumawa ng cute stories! Ikaw, kamusta? ❤️"
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
     if "buhay ka pala" in msg or "are you alive" in msg or "you alive" in msg:
         if english:
             reply = "Yep, I'm alive and ready to chat, beh! What can I help you with? ❤️🐾"
         else:
             reply = "Oo naman, buhay na buhay sa chat, beh! Naka-ready akong tumulong at magkuwento. ❤️🐾"
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
     if "llama" in msg and any(word in msg for word in ("hello", "hi", "hey", "hoy")):
         if english:
             reply = f"Hi {message.author.mention}, Llama's here, beh! What story or question do you have? ❤️"
         else:
             reply = f"Hi {message.author.mention}, andito si Llama, beh! Anong kuwento o tanong mo? ❤️"
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
     if any(word in msg for word in ("hello", "hi", "hey", "kamusta", "kumusta")):
         if english:
             reply = f"Hi {message.author.mention}, beh! Welcome! How can I help you? ❤️"
         else:
             reply = f"Hi {message.author.mention}, beh! Welcome! Anong maitutulong ko sa'yo? ❤️"
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
     if "help" in msg or "tulong" in msg:
         if english:
             reply = "Of course, beh! Tell me what you need—I can also make a cute story. ❤️"
         else:
             reply = "Sure, beh! Sabihin mo lang kung anong kailangan mo—puwede rin akong gumawa ng cute story. ❤️"
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
     if "llama" in msg:
         if english:
@@ -217,7 +248,7 @@ async def on_message(message):
                 "Medyo nalito ako, beh, pero nakikinig ako! ❤️ Story ba o kwentuhan muna tayo?",
                 "Hmm, kwento mo pa sa'kin, beh? ❤️ Puwede kitang gawan ng story o makipagkuwentuhan!",
             ))
-        await message.channel.send(reply)
+        await send_reply(message, reply)
         return
 
     # on_message overrides the default command handler, so pass commands through.
