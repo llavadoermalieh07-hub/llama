@@ -1,5 +1,6 @@
 import os
 import re
+from random import choice
 from threading import Thread
 
 import discord
@@ -139,6 +140,15 @@ async def on_message(message):
             await message.channel.send(make_story(topic, language))
         return
 
+    # Introduce Llama before the general replies and fallback.
+    if any(phrase in msg for phrase in ("about yourself", "who are you", "sino ka", "pakilala", "tell me about")):
+        if english:
+            reply = "Hi beh! I'm Llama! ❤️ I'm your cute little friend here in Discord. I love chatting with you, making cute stories, and helping you with your shop! What do you want to talk about?"
+        else:
+            reply = "Hi beh! Ako si Llama! ❤️ Yung cute mong kaibigan dito sa Discord. Mahilig ako makipagkwentuhan, gumawa ng cute stories, at tumulong sa shop mo! Anong kwento natin today?"
+        await message.channel.send(reply)
+        return
+
     # Respond to the actual question in the language the user used.
     if "sure" in msg:
         reply = "Yes beh, I'm sure! ❤️" if english else "Oo naman beh, sure ako! ❤️"
@@ -181,9 +191,17 @@ async def on_message(message):
         return
     if "llama" in msg:
         if english:
-            reply = "Yes beh, I'm here! Ask me anything or tell me a story topic. ❤️"
+            reply = choice((
+                "Hmm beh, I didn't quite get that, but I'm here! ❤️ Want me to make you a story or chat about something?",
+                "I'm not sure I understood, beh, but I'm listening! ❤️ Want a cute story or just a chat?",
+                "Hmm, could you tell me a little more, beh? ❤️ I can make a story or talk with you!",
+            ))
         else:
-            reply = "Yes beh, andito ako! Tanong ka lang o sabihin ang topic ng story na gusto mo. ❤️"
+            reply = choice((
+                "Hmm beh, hindi ko masyado na-gets, pero andito lang ako! ❤️ Gusto mo gawan kita ng story o kwentuhan tayo?",
+                "Medyo nalito ako, beh, pero nakikinig ako! ❤️ Story ba o kwentuhan muna tayo?",
+                "Hmm, kwento mo pa sa'kin, beh? ❤️ Puwede kitang gawan ng story o makipagkuwentuhan!",
+            ))
         await message.channel.send(reply)
         return
 
