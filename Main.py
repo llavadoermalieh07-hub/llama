@@ -51,11 +51,16 @@ async def send_reply(message, reply):
         return
 
     try:
+        row = {
+            "user_id": str(message.author.id),
+            "username": str(message.author),
+            "message": message.content,
+            "llama_reply": reply,
+            "content": message.content,
+            "bot_reply": reply,
+        }
         result = await asyncio.to_thread(
-            lambda: supabase.table("llama_memories").insert({
-                "message": message.content,
-                "llama_reply": reply,
-            }).execute()
+            lambda: supabase.table("llama_memories").insert(row).execute()
         )
         print(f"Saved conversation to Supabase: {result}")
     except Exception as error:
