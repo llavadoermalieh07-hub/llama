@@ -143,7 +143,7 @@ async def on_message(message):
     # Introduce Llama before the general replies and fallback.
     if any(phrase in msg for phrase in ("about yourself", "who are you", "sino ka", "pakilala", "tell me about")):
         if english:
-            reply = "Hi beh! I'm Llama! ❤️ I'm your cute little friend here in Discord. I love chatting with you, making cute stories, and helping you with your shop! What do you want to talk about?"
+            reply = "Hi beh! I'm Llama! ❤️ I'm your cute little friend here in Discord. I love chatting with you, making cute stories, and helping you with your shop! What do you want to talk about today?"
         else:
             reply = "Hi beh! Ako si Llama! ❤️ Yung cute mong kaibigan dito sa Discord. Mahilig ako makipagkwentuhan, gumawa ng cute stories, at tumulong sa shop mo! Anong kwento natin today?"
         await message.channel.send(reply)
