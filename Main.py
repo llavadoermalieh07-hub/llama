@@ -52,23 +52,31 @@ def detect_language(text):
 
 
 def make_story(topic, language="tl"):
-    """Make a short, cute story that includes the user's chosen topic."""
+    """Make a short, cute story inspired by the user's chosen topic."""
     topic = topic.strip(" .,!?:;\"'") or ("a little adventure" if language == "en" else "munting adventure")
     if language == "en":
-        return (
-            f"Once upon a time, beh, there was a little friend named {topic}. "
-            "One morning, they found a tiny, sparkling star who had lost its way. "
-            "They helped the star find its way home, and it granted them one wish: "
-            "to fill the world with kindness and smiles. From then on, they shared "
-            "happiness wherever they went. The end! ❤️✨"
-        )
-    return (
-        f"Noong unang panahon, beh, may isang munting kaibigan na nagngangalang {topic}. "
-        "Isang umaga, nakakita siya ng kumikislap na bituin na naligaw. "
-        "Tinulungan niya itong makauwi sa langit, at bilang pasasalamat, "
-        "binigyan siya nito ng wish na punuin ng kabaitan at smiles ang mundo. "
-        "Mula noon, nagbahagi sila ng saya sa lahat. The end! ❤️✨"
-    )
+        return choice((
+            f"Once upon a time, a tiny bunny found a little bit of magic in {topic}. "
+            "With a new friend by their side, they turned it into a garden where everyone felt welcome. "
+            "That night, the stars twinkled just for them. The end! ❤️✨",
+            f"One sunny day, {topic} led a curious kitten to a shy little cloud. "
+            "Together they made the softest rainbows, then shared them with the whole town. "
+            "The kitten went home with a new friend and a very happy heart. The end! ❤️✨",
+            f"In a cozy little world of {topic}, a small mouse discovered a lost button that belonged to the moon. "
+            "A firefly helped carry it home, and the moon shone extra brightly as a thank-you. "
+            "They all wished each other sweet dreams. The end! ❤️✨",
+        ))
+    return choice((
+        f"Isang araw, may munting kuneho na nakakita ng kaunting mahika sa {topic}. "
+        "Kasama ang bagong kaibigan, ginawa nila itong hardin kung saan masaya at welcome ang lahat. "
+        "Kinagabihan, kumindat ang mga bituin para sa kanila. The end! ❤️✨",
+        f"Isang maaraw na umaga, dinala ng {topic} ang usisang kuting sa isang mahiyaing ulap. "
+        "Sabay silang gumawa ng makukulay na bahaghari at ibinahagi iyon sa buong bayan. "
+        "Umuwi ang kuting na may bagong kaibigan at masayang puso. The end! ❤️✨",
+        f"Sa isang munting mundong puno ng {topic}, nakakita ang maliit na daga ng butones na nahulog mula sa buwan. "
+        "Tinulungan siya ng alitaptap na isauli iyon, kaya lumiwanag ang buwan bilang pasasalamat. "
+        "Sabay-sabay silang bumati ng magandang gabi. The end! ❤️✨",
+    ))
 
 
 @bot.event
@@ -120,11 +128,18 @@ async def on_message(message):
         return
 
     # Stories are handled before general questions, so a story request gets a story.
+    # Support casual requests like "Llama, kwento about cats" as well.
     story_match = re.search(
-        r"(?:make|write|tell me|create)\s+(?:me\s+)?(?:a\s+)?story\s+about\s+(.+)",
+        r"\b(?:llama\s*[,!: -]*\s*)?(?:kwento|kuwento)\s+(?:about|tungkol\s+sa)\s+(.+)",
         text,
         flags=re.IGNORECASE,
     )
+    if not story_match:
+        story_match = re.search(
+            r"(?:make|write|tell me|create)\s+(?:me\s+)?(?:a\s+)?story\s+about\s+(.+)",
+            text,
+            flags=re.IGNORECASE,
+        )
     if not story_match:
         story_match = re.search(
             r"(?:gumawa|gawan|gawa)\s+(?:ka\s+)?(?:ng\s+)?story\s+(?:tungkol\s+sa|about)?\s*(.*)",
