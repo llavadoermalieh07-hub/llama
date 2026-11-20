@@ -34,10 +34,11 @@ SHOP_URL = "https://kawaii-shop-update.netlify.app/"
 
 # Configure these as environment variables in your hosting dashboard.
 SUPABASE_URL = os.getenv("SUPABASE_URL")
+# Prefer a service-role/secret key, since an anon key may be blocked by RLS.
 SUPABASE_KEY = (
-    os.getenv("SUPABASE_KEY")
-    or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    os.getenv("SUPABASE_SERVICE_ROLE_KEY")
     or os.getenv("SUPABASE_SECRET_KEY")
+    or os.getenv("SUPABASE_KEY")
 )
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL and SUPABASE_KEY else None
 
@@ -46,16 +47,17 @@ async def send_reply(message, reply):
     """Send Llama's reply and store the user/reply pair in Supabase."""
     await message.channel.send(reply)
     if supabase is None:
-        print("Supabase memory not saved: set SUPABASE_URL and SUPABASE_KEY.")
+        print("Supabase memory not saved: set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_KEY).")
         return
 
     try:
-        await asyncio.to_thread(
+        result = await asyncio.to_thread(
             lambda: supabase.table("llama_memories").insert({
                 "message": message.content,
                 "llama_reply": reply,
             }).execute()
         )
+        print(f"Saved conversation to Supabase: {result}")
     except Exception as error:
         # Keep the Discord bot responsive if Supabase is temporarily unavailable.
         print(f"Failed to save conversation to Supabase: {error}")
@@ -251,8 +253,14 @@ async def on_message(message):
         await send_reply(message, reply)
         return
 
-    # on_message overrides the default command handler, so pass commands through.
+    # Keep command processing, then reply to other messages so each user message
+    # receives a reply and is saved as a message/reply pair.
     await bot.process_commands(message)
+    if english:
+        reply = "I'm here, beh! ❤️ Tell me a little more, or ask me for a cute story."
+    else:
+        reply = "Andito lang ako, beh! ❤️ Kwento ka pa, o mag-request ka ng cute story."
+    await send_reply(message, reply)
 
 
 bot.run(os.getenv("TOKEN"))
